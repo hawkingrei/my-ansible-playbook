@@ -1,0 +1,16 @@
+- file:
+    path: /suphawking/dist/opt/java8
+    state: absent
+
+- name: Creates app directory
+  file: path=/suphawking/dist/opt/jdk1.8.0_111 state=directory
+  
+- name: java8
+  unarchive: src=http://repo.suphawking.net/suphawking/jdk-8u111-linux-x64.tar.gz dest=/suphawking/dist/opt/  copy=no 
+
+- name: create link
+  file: src=/suphawking/dist/opt/jdk1.8.0_111/
+        dest=/suphawking/dist/opt/java8
+        state=link
+        force=yes
+  ignore_errors: True

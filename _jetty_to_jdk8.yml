@@ -1,0 +1,16 @@
+- hosts: "{{ hosts }}"
+  remote_user: admin
+  gather_facts: no
+
+  tasks:
+  - name: check required variables
+    fail: msg="Variable '{{ item }}' is not defined"
+    when: "{{ item }} is not defined"
+    with_items:
+      - hosts
+  - include: roles/common/tasks/java8.yml
+  - lineinfile:
+     dest: /duitang/dist/sys/jetty_{{ hosts }}/bin/jetty.sh
+     regexp: 'JAVA=/suphawking/dist/sys/java/bin/java'
+     line: 'JAVA=/suphawking/dist/opt/java8/bin/java'
+    become: true
