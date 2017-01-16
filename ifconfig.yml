@@ -1,0 +1,8 @@
+- hosts: "{{ hosts }}"  # 自己指定，先玩注意别同时停掉两个 VPN
+  gather_facts: False
+  become: yes
+
+  tasks:
+  - command: ifconfig
+    register: hello
+  - debug: var=hello.stdout_lines
