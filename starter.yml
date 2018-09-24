@@ -1,0 +1,94 @@
+- hosts: all
+  gather_facts: False 
+  become: yes
+
+  tasks:
+  - name: epel
+    command:
+      sudo amazon-linux-extras install epel
+
+  - name: upgrade all packages
+    yum:
+      name: '*'
+      state: latest
+
+  - name: "install the Base package group"
+    yum:
+      name=@Base
+      state=present
+  - name: "install the Development tools package group"
+    yum:
+      name="@Development tools"
+      state=present
+  - name: "install pkgs"
+    yum: 
+      name: "{{ item }}"
+      state: present
+    vars:
+      item:
+        - nload
+        - vim-enhanced
+        - bzip2-devel
+        - libcurl-devel
+        - expat-devel
+        - freetype-devel
+        - git
+        - gcc
+        - gcc-c++
+        - gcc-gfortran
+        - gdbm-devel
+        - ghostscript
+        - htop
+        - iotop
+        - iftop
+        - atop
+        - lcms2-devel
+        - libffi-devel
+        - libhugetlbfs-devel
+        - libjpeg-turbo-devel
+        - libpng-devel
+        - libtiff-devel
+        - libwmf-devel
+        - libxml2-devel
+        - libyaml-devel
+        - libzip-devel
+        - nc
+        - ncurses-devel
+        - net-snmp
+        - net-snmp-utils
+        - ntp
+        - ntpdate
+        - openssl-devel
+        - pcre-devel
+        - readline-devel
+        - screen
+        - siege
+        - sqlite-devel
+        - subversion
+        - telnet
+        - tmux
+        - traceroute
+        - wget
+        - zlib-devel
+        - zsh
+        - blas-devel    # for numpy/scipy
+        - lapack-devel  # for numpy/scipy
+        - atlas-devel   # for numpy/scipy
+        - unzip
+        - supervisor
+        - numactl-devel
+        - libaio
+        - libaio-devel
+        - CUnit-devel
+        - CUnit  
+        - uuid-devel
+        - libuuid-devel
+  - git:
+     repo: https://github.com/spdk/spdk
+     dest: /home/ec2-user/spdk
+  - name: spdk
+    command: git submodule update --init && sudo scripts/pkgdep.sh && ./configure && make
+    args:
+     chdir: /home/ec2-user/spdk
+
+# vim: set ft=ansible:
